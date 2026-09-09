@@ -2,10 +2,13 @@
 
 bool running = true;
 
+List<StudySession> studySessions = new List<StudySession>();
+
 while (running)
 {
     Console.WriteLine("1. Start study session");
-    Console.WriteLine("2. Exit");
+    Console.WriteLine("2. View history");
+    Console.WriteLine("3. Exit");
     string? menuChoice = Console.ReadLine();
 
     if (menuChoice == "1")
@@ -23,17 +26,51 @@ while (running)
 
         Console.WriteLine("Press Enter to start the session");
         Console.ReadLine();
-        DateTime startTime = DateTime.Now;
+        
+        StudySession session = new StudySession
+        {
+            Subject = subject,
+            StartTime = DateTime.Now
+        };
         Console.WriteLine("Session started.");  
 
         Console.WriteLine("Press Enter to stop the session");
         Console.ReadLine();
-        DateTime endTime = DateTime.Now;
-        TimeSpan duration = endTime - startTime;
+        
+        session.EndTime = DateTime.Now;
+
+        TimeSpan duration = session.EndTime.Value - session.StartTime;
+
+        studySessions.Add(session);
 
         Console.WriteLine($"You studied {subject} for {duration.Hours}h {duration.Minutes}m {duration.Seconds}s");
     }
     else if (menuChoice == "2")
+    {
+       if(studySessions.Count == 0)
+        {
+            Console.WriteLine("No study sessions found");
+        }
+        else
+        {
+            foreach (StudySession session in studySessions)
+            {
+                Console.WriteLine($"Subject: {session.Subject}");
+                Console.WriteLine($"Started at: {session.StartTime}");
+                Console.WriteLine($"Finished at: {session.EndTime}");
+                if (session.EndTime.HasValue)
+                {
+                    TimeSpan duration = session.EndTime.Value - session.StartTime;
+
+                    Console.WriteLine($"Duration: {duration.Hours}h {duration.Minutes}m {duration.Seconds}s");
+                    Console.WriteLine();
+                }
+            }
+        }
+
+        
+    }
+    else if (menuChoice == "3")
     {
         running = false;
     }
