@@ -41,6 +41,9 @@ while (running)
 
         TimeSpan duration = session.EndTime.Value - session.StartTime;
 
+        Console.WriteLine("Add a note (optional): ");
+        session.Note = Console.ReadLine();
+
         studySessions.Add(session);
 
         Console.WriteLine($"You studied {subject} for {duration.Hours}h {duration.Minutes}m {duration.Seconds}s");
@@ -63,8 +66,17 @@ while (running)
                     TimeSpan duration = session.EndTime.Value - session.StartTime;
 
                     Console.WriteLine($"Duration: {duration.Hours}h {duration.Minutes}m {duration.Seconds}s");
-                    Console.WriteLine();
+                    
                 }
+
+                if (!string.IsNullOrWhiteSpace(session.Note))
+                {
+                    Console.WriteLine($"Note: {session.Note}");
+                   
+                }
+
+                Console.WriteLine();
+                 
             }
         }
 
