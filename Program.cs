@@ -1,8 +1,10 @@
-﻿Console.WriteLine("Study Tracker");
+﻿using System.Text.Json;
+
+Console.WriteLine("Study Tracker");
 
 bool running = true;
 
-List<StudySession> studySessions = new List<StudySession>();
+List<StudySession> studySessions = LoadSessions();
 
 while (running)
 {
@@ -94,16 +96,34 @@ while (running)
         session.Note = Console.ReadLine();
 
         sessions.Add(session);
+        SaveSessions(sessions);
 
         if (session.Duration is TimeSpan duration)
     {
             Console.WriteLine($"You studied {session.Subject} for {duration.Hours}h {duration.Minutes}m {duration.Seconds}s");
     }
-
-
-   
-
+}
+void SaveSessions(List<StudySession> sessions)
+    {
+        string json = JsonSerializer.Serialize(sessions);
+        File.WriteAllText("sessions.json", json);
     }
+
+List<StudySession> LoadSessions()
+{
+            
+    if (!File.Exists("sessions.json"))
+    {
+        return new List<StudySession>(); 
+    }
+    string json = File.ReadAllText("sessions.json");
+
+    List<StudySession>? loadedSessions = JsonSerializer.Deserialize<List<StudySession>>(json);
+
+    return loadedSessions ?? new List<StudySession>();
+}   
+
+
 
      
 
