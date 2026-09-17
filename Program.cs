@@ -25,7 +25,7 @@ while (running)
     {
         Console.WriteLine("Invalid choice. Please try again.");
     }
-    
+}
     void ShowMenu()
     {
         Console.WriteLine("1. Start study session");
@@ -46,12 +46,9 @@ while (running)
                 Console.WriteLine($"Subject: {session.Subject}");
                 Console.WriteLine($"Started at: {session.StartTime}");
                 Console.WriteLine($"Finished at: {session.EndTime}");
-                if (session.EndTime.HasValue)
+                if (session.Duration is TimeSpan duration)
                 {
-                    TimeSpan duration = session.EndTime.Value - session.StartTime;
-
                     Console.WriteLine($"Duration: {duration.Hours}h {duration.Minutes}m {duration.Seconds}s");
-            
                 }
 
                 if (!string.IsNullOrWhiteSpace(session.Note))
@@ -93,19 +90,22 @@ while (running)
         
         session.EndTime = DateTime.Now;
 
-        TimeSpan duration = session.EndTime.Value - session.StartTime;
-
         Console.WriteLine("Add a note (optional): ");
         session.Note = Console.ReadLine();
 
         sessions.Add(session);
 
-        Console.WriteLine($"You studied {session.Subject} for {duration.Hours}h {duration.Minutes}m {duration.Seconds}s");
+        if (session.Duration is TimeSpan duration)
+    {
+            Console.WriteLine($"You studied {session.Subject} for {duration.Hours}h {duration.Minutes}m {duration.Seconds}s");
+    }
+
+
    
 
     }
 
      
-}
+
 
 
